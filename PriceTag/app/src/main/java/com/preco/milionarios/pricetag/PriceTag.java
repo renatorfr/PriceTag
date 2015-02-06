@@ -1,5 +1,6 @@
 package com.preco.milionarios.pricetag;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
@@ -16,6 +17,7 @@ public class PriceTag extends ActionBarActivity {
     private Button getLeitura;
     private TextView resultado;
     private String contents;
+    Localization local;
 
 
     @Override
@@ -40,9 +42,7 @@ public class PriceTag extends ActionBarActivity {
             }
         });
 
-        if (savedInstanceState != null) {
-            resultado.setText(contents);
-        }
+        local.startGPS(getSystemService(Context.LOCATION_SERVICE));
     }
 
     @Override
