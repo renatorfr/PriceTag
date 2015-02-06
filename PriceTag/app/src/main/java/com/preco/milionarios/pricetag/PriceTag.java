@@ -1,24 +1,28 @@
 package com.preco.milionarios.pricetag;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.StrictMode;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
-public class PriceTag extends ActionBarActivity {
+public class PriceTag extends Activity {
 
     private Button getLeitura;
     private TextView resultado;
     private String contents;
-    Localization local;
-
+    private Button getPosition;
+    private EditText latitude;
+    private EditText longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,9 @@ public class PriceTag extends ActionBarActivity {
         getLeitura = (Button) findViewById(R.id.getLeitura);
         resultado = (TextView) findViewById(R.id.resultado);
 
+        getPosition = (Button) findViewById(R.id.btLocalizar);
+        latitude = (EditText) findViewById(R.id.edLatitude);
+        longitude = (EditText) findViewById(R.id.edLongitude);
 
         getLeitura.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,8 +48,20 @@ public class PriceTag extends ActionBarActivity {
                 startActivityForResult(intent, 0);
             }
         });
+        final AlertDialog.Builder alarme = new AlertDialog.Builder(this).setTitle("Atenção!").setMessage("GPS Desligado !").setNeutralButton("OK", null);
 
-        local.startGPS(getSystemService(Context.LOCATION_SERVICE));
+        getPosition.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Localization local = new Localization();
+                Object contexto = getSystemService(Context.LOCATION_SERVICE);
+                local.startGPS(contexto, latitude, longitude, alarme);
+            }
+        });
+
+
+
     }
 
     @Override
