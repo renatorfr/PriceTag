@@ -1,4 +1,4 @@
-package com.preco.milionarios.pricetag;
+package com.preco.milionarios.pricetag.pricetag;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -12,7 +12,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.preco.milionarios.pricetag.utils.ParseHtml;
+import com.preco.milionarios.pricetag.R;
 
 
 public class PriceTag extends Activity {
@@ -57,6 +59,7 @@ public class PriceTag extends Activity {
                 Localization local = new Localization();
                 Object contexto = getSystemService(Context.LOCATION_SERVICE);
                 local.startGPS(contexto, latitude, longitude, alarme);
+                getPlace();
             }
         });
 
@@ -89,5 +92,9 @@ public class PriceTag extends Activity {
                 // Handle cancel
             }
         }
+    }
+
+    private void getPlace() {
+        new Places().execute(this);
     }
 }

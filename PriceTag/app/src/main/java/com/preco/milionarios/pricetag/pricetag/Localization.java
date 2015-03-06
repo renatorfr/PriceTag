@@ -1,4 +1,4 @@
-package com.preco.milionarios.pricetag;
+package com.preco.milionarios.pricetag.pricetag;
 
 //importação das classes necessárias para o funcionamento do aplicativo
 
@@ -9,7 +9,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.widget.EditText;
-import android.widget.Toast;
+
 
 
 
@@ -26,6 +26,9 @@ public class Localization extends Activity {
                 latitude.setText("" + locat.getLatitude());
                 longitude.setText("" + locat.getLongitude());
             }
+
+
+
             public void onStatusChanged(String provider, int status, Bundle extras) { }
             public void onProviderEnabled(String provider) {}
             public void onProviderDisabled(String provider) {
