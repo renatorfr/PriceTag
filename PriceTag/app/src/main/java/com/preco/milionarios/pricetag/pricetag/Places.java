@@ -3,6 +3,7 @@ package com.preco.milionarios.pricetag.pricetag;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.text.Editable;
 import android.widget.Toast;
 
 import com.preco.milionarios.pricetag.utils.WebserviceHelper;
@@ -21,7 +22,14 @@ import java.util.Map;
  */
 public class Places extends AsyncTask<Context, Void, String> {
 
-    Context context = null;
+    private Context context = null;
+    private String latitude = null;
+
+
+    public Places(Editable latitude) {
+        this.latitude = latitude.toString();
+
+    }
 
     @Override
     protected String doInBackground(Context... params) {
@@ -44,14 +52,15 @@ public class Places extends AsyncTask<Context, Void, String> {
         String url = "https://maps.googleapis.com/maps/api/place/search/json";
         Map<String, String> params = new HashMap<String, String>();
 
-        params.put("location", "37.787930,-122.4074990");
+        //params.put("location", "37.787930,-122.4074990");
+        params.put("location", latitude);
         params.put("radius", "200");
         params.put("key", "AIzaSyA3mNfzyHZ4K4pviZStxXCCQBemWoXgkBg");
 
         HttpResponse response = WebserviceHelper.doGET(url, params);
 
         if (response.getStatusLine().getStatusCode() == 200) {
-            return new BasicResponseHandler().handleResponse(response);
+            return latitude  + new BasicResponseHandler().handleResponse(response);
         }
 
         return " NOTHING";

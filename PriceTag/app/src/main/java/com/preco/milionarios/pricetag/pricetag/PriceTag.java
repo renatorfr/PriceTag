@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.StrictMode;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,8 +15,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.preco.milionarios.pricetag.utils.ParseHtml;
 import com.preco.milionarios.pricetag.R;
+import com.preco.milionarios.pricetag.utils.ParseHtml;
 
 
 public class PriceTag extends Activity {
@@ -59,10 +61,22 @@ public class PriceTag extends Activity {
                 Localization local = new Localization();
                 Object contexto = getSystemService(Context.LOCATION_SERVICE);
                 local.startGPS(contexto, latitude, longitude, alarme);
-                getPlace();
+
+
+
             }
         });
 
+        latitude.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                getPlace();
+            }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+        });
 
 
     }
@@ -95,6 +109,8 @@ public class PriceTag extends Activity {
     }
 
     private void getPlace() {
-        new Places().execute(this);
+        new Places(latitude.getText()).execute(this);
     }
+
+
 }
