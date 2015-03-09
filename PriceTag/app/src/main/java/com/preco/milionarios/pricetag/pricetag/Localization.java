@@ -34,18 +34,18 @@ public class Localization{
             }
             @Override
             public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
-                alerta.setMessage("Status Alterado" + arg0);
+                alerta.setMessage("Status Alterado " + arg0);
                 alerta.show();
             }
             @Override
             public void onProviderEnabled(String arg0) {
-                alerta.setMessage("Provider Ativo" + arg0);
+                alerta.setMessage("Provider Ativo " + arg0);
                 alerta.show();
 
             }
             @Override
             public void onProviderDisabled(String arg0) {
-                alerta.setMessage("Provider Desativado" + arg0);
+                alerta.setMessage("Provider Desativado " + arg0);
                 alerta.show();
             }
         };

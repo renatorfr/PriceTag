@@ -27,6 +27,7 @@ public class PriceTag extends Activity {
     private Button getPosition;
     private EditText latitude;
     private EditText longitude;
+    private AlertDialog.Builder alarme = new AlertDialog.Builder(this).setTitle("Atenção!").setNeutralButton("OK", null);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,8 @@ public class PriceTag extends Activity {
         latitude = (EditText) findViewById(R.id.edLatitude);
         longitude = (EditText) findViewById(R.id.edLongitude);
 
+
+        // listener para ler codigo de barras
         getLeitura.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,21 +55,19 @@ public class PriceTag extends Activity {
                 startActivityForResult(intent, 0);
             }
         });
-        final AlertDialog.Builder alarme = new AlertDialog.Builder(this).setTitle("Atenção!").setMessage("GPS Desligado !").setNeutralButton("OK", null);
 
+
+        //listenr para obter localização
         getPosition.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Localization local = new Localization();
                 Object contexto = getSystemService(Context.LOCATION_SERVICE);
                 local.startGPS(contexto, latitude, longitude, alarme);
-
-
-
             }
         });
 
+        //listener para obter json
         latitude.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
@@ -77,8 +78,6 @@ public class PriceTag extends Activity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
         });
-
-
     }
 
     @Override
@@ -97,13 +96,14 @@ public class PriceTag extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    //requisição da descrição do produto
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == 0) {
             if (resultCode == RESULT_OK) {
                 contents = intent.getStringExtra("SCAN_RESULT");
                 resultado.setText(ParseHtml.getString("http://cosmos.bluesoft.com.br/products/" + contents));
             } else if (resultCode == RESULT_CANCELED) {
-                // Handle cancel
+                resultado.setText("Cancelado");
             }
         }
     }

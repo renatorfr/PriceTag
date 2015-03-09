@@ -11,22 +11,20 @@ import java.io.IOException;
 public class ParseHtml {
 
     public static String getString(String site) {
-
+        String resposta = null;
         Document doc;
         try {
-
             // need http protocol
             doc = Jsoup.connect(site).get();
-
             // get page title
             Elements descr = doc.getElementsByTag("h1");
-            for (Element d : descr) return descr.text().substring(0, descr.text().indexOf("GTIN"));
-            return "num deu";
-
+            for (Element d : descr) resposta = resposta + descr.text().substring(0, descr.text().indexOf("GTIN"));
+            if (resposta == null) return "Sem resposta";
+            return resposta;
 
         } catch (IOException e) {
             e.printStackTrace();
-            return "";
+            return e.getMessage();
         }
     }
 }

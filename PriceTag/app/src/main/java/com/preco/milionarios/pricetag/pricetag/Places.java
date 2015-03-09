@@ -54,7 +54,7 @@ public class Places extends AsyncTask<Context, Void, String> {
 
         //params.put("location", "37.787930,-122.4074990");
         params.put("location", latitude);
-        params.put("radius", "200");
+        params.put("radius", "300");
         params.put("key", "AIzaSyA3mNfzyHZ4K4pviZStxXCCQBemWoXgkBg");
 
         HttpResponse response = WebserviceHelper.doGET(url, params);
