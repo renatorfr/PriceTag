@@ -18,6 +18,7 @@ public class ParseHtml {
             doc = Jsoup.connect(site).get();
             // get page title
             Elements descr = doc.getElementsByTag("h1");
+            resposta = "";
             for (Element d : descr) resposta = resposta + descr.text().substring(0, descr.text().indexOf("GTIN"));
             if (resposta == null) return "Sem resposta";
             return resposta;

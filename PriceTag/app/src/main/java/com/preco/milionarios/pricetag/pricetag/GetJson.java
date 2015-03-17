@@ -20,15 +20,20 @@ import java.util.Map;
 /**
  * Created by dunha on 13/02/2015.
  */
-public class Places extends AsyncTask<Context, Void, String> {
+public class GetJson extends AsyncTask<Context, Void, String> {
 
     private Context context = null;
+    private GetJsonResponse delegate = null;
     private String latitude = null;
 
 
-    public Places(Editable latitude) {
+    public GetJson(Editable latitude) {
         this.latitude = latitude.toString();
 
+    }
+
+    public void setDelegate(GetJsonResponse delegate){
+        this.delegate = delegate;
     }
 
     @Override
@@ -45,6 +50,7 @@ public class Places extends AsyncTask<Context, Void, String> {
     @Override
     protected void onPostExecute(String response) {
         Toast.makeText(context, response, Toast.LENGTH_LONG).show();
+        delegate.getJsonResponse(response);
     }
 
     private String getPlaces() throws IOException {
@@ -60,9 +66,13 @@ public class Places extends AsyncTask<Context, Void, String> {
         HttpResponse response = WebserviceHelper.doGET(url, params);
 
         if (response.getStatusLine().getStatusCode() == 200) {
-            return latitude  + new BasicResponseHandler().handleResponse(response);
+            return new BasicResponseHandler().handleResponse(response);
         }
 
         return " NOTHING";
+    }
+
+    interface GetJsonResponse{
+        void getJsonResponse(String placesJson);
     }
 }

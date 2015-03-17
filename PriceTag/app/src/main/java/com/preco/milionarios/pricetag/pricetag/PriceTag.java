@@ -1,7 +1,6 @@
 package com.preco.milionarios.pricetag.pricetag;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,12 +13,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.preco.milionarios.pricetag.PlacesObjects.Place;
+import com.preco.milionarios.pricetag.PlacesObjects.PlaceResult;
 import com.preco.milionarios.pricetag.R;
 import com.preco.milionarios.pricetag.utils.ParseHtml;
 
+import static android.app.AlertDialog.*;
 
-public class PriceTag extends Activity {
+
+public class PriceTag extends Activity implements GetJson.GetJsonResponse {
 
     private Button getLeitura;
     private TextView resultado;
@@ -27,7 +32,10 @@ public class PriceTag extends Activity {
     private Button getPosition;
     private EditText latitude;
     private EditText longitude;
-    private AlertDialog.Builder alarme = new AlertDialog.Builder(this).setTitle("Atenção!").setNeutralButton("OK", null);
+    private Context context = this;
+    private Place places;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +65,13 @@ public class PriceTag extends Activity {
         });
 
 
-        //listenr para obter localização
+        //listener para obter localização
         getPosition.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Builder alarme = new Builder(context);
+                alarme.setTitle("Atenção!");
+                alarme.setNeutralButton("OK", null);
                 Localization local = new Localization();
                 Object contexto = getSystemService(Context.LOCATION_SERVICE);
                 local.startGPS(contexto, latitude, longitude, alarme);
@@ -71,7 +82,9 @@ public class PriceTag extends Activity {
         latitude.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
-                getPlace();
+
+                    getPlace();
+
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -109,8 +122,24 @@ public class PriceTag extends Activity {
     }
 
     private void getPlace() {
-        new Places(latitude.getText()).execute(this);
+        GetJson getJson = new GetJson(latitude.getText());
+        getJson.setDelegate(this);
+        getJson.execute(this);
     }
 
+    public Place loadPlaces(String jsonString) {
+        Gson gson = new Gson();
+        places = gson.fromJson(jsonString, Place.class);
 
+        for(PlaceResult placeResult : places.getResult()){
+            Toast.makeText(this,"" +  placeResult.getGeometry().getLocation().getLat(), Toast.LENGTH_LONG).show();
+        }
+
+        return places;
+    }
+
+    @Override
+    public void getJsonResponse(String placesJson) {
+        this.loadPlaces(placesJson);
+    }
 }
