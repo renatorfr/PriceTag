@@ -3,10 +3,9 @@ package com.preco.milionarios.pricetag.pricetag;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,19 +20,24 @@ import com.preco.milionarios.pricetag.PlacesObjects.PlaceResult;
 import com.preco.milionarios.pricetag.R;
 import com.preco.milionarios.pricetag.utils.ParseHtml;
 
-import static android.app.AlertDialog.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
-public class PriceTag extends Activity implements GetJson.GetJsonResponse {
+public class PriceTag extends Activity implements GetJson.GetJsonResponse, Localization.GetGPSResponse{
 
     private Button getLeitura;
-    private TextView resultado;
+    private TextView description;
     private String contents;
     private Button getPosition;
+    private Button showList;
     private EditText latitude;
     private EditText longitude;
     private Context context = this;
     private Place places;
+    private List<PlaceResult> placesResult = new ArrayList<PlaceResult>();
+    private Location localNow;
+    private PriceTag thisClass = this;
 
 
 
@@ -47,8 +51,8 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse {
         }
 
         getLeitura = (Button) findViewById(R.id.getLeitura);
-        resultado = (TextView) findViewById(R.id.resultado);
-
+        showList = (Button) findViewById(R.id.showList);
+        description = (TextView) findViewById(R.id.resultado);
         getPosition = (Button) findViewById(R.id.btLocalizar);
         latitude = (EditText) findViewById(R.id.edLatitude);
         longitude = (EditText) findViewById(R.id.edLongitude);
@@ -64,33 +68,29 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse {
             }
         });
 
+        showList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), ItensListView.class);
+                ItensListView.places = placesResult;
+                startActivity(intent);
+                finish();
+            }
+        });
+
+
+
 
         //listener para obter localização
         getPosition.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Builder alarme = new Builder(context);
-                alarme.setTitle("Atenção!");
-                alarme.setNeutralButton("OK", null);
                 Localization local = new Localization();
-                Object contexto = getSystemService(Context.LOCATION_SERVICE);
-                local.startGPS(contexto, latitude, longitude, alarme);
+                local.setDelegate(thisClass);
+                local.startGPS(getSystemService(Context.LOCATION_SERVICE), context);
             }
         });
 
-        //listener para obter json
-        latitude.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable s) {
-
-                    getPlace();
-
-            }
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-        });
     }
 
     @Override
@@ -114,32 +114,39 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse {
         if (requestCode == 0) {
             if (resultCode == RESULT_OK) {
                 contents = intent.getStringExtra("SCAN_RESULT");
-                resultado.setText(ParseHtml.getString("http://cosmos.bluesoft.com.br/products/" + contents));
+                description.setText(ParseHtml.getString("http://cosmos.bluesoft.com.br/products/" + contents, "h1"));
             } else if (resultCode == RESULT_CANCELED) {
-                resultado.setText("Cancelado");
+                description.setText("Cancelado");
             }
         }
     }
 
     private void getPlace() {
-        GetJson getJson = new GetJson(latitude.getText());
+        GetJson getJson = new GetJson(latitude.getText() + "," + longitude.getText(), null);
         getJson.setDelegate(this);
         getJson.execute(this);
     }
 
-    public Place loadPlaces(String jsonString) {
+    public List<PlaceResult> loadPlaces(String jsonString) {
         Gson gson = new Gson();
-        places = gson.fromJson(jsonString, Place.class);
-
-        for(PlaceResult placeResult : places.getResult()){
-            Toast.makeText(this,"" +  placeResult.getGeometry().getLocation().getLat(), Toast.LENGTH_LONG).show();
-        }
-
-        return places;
+        places = gson.fromJson(jsonString, new Place().getClass());
+        //for(PlaceResult placeResult : places.getResult())
+        //    Toast.makeText(this, "" + placeResult.getName() + " - " + placeResult.getGeometry().getLocationResult().getDistance(localNow), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "OK" , Toast.LENGTH_LONG).show();
+        return places.getResult();
     }
 
     @Override
     public void getJsonResponse(String placesJson) {
-        this.loadPlaces(placesJson);
+        placesResult = this.loadPlaces(placesJson);
+    }
+
+    @Override
+    public void getGPSResponse(Location location) {
+        localNow = location;
+        latitude.setText("" + location.getLatitude());
+        longitude.setText("" + location.getLongitude());
+        getPlace();
+
     }
 }

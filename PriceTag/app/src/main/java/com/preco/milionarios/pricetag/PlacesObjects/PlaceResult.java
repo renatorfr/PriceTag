@@ -89,4 +89,8 @@ public class PlaceResult {
     public Geometry getGeometry() {
         return geometry;
     }
+
+    public String toString(){
+        return name;
+    }
 }

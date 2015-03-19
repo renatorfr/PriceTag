@@ -25,16 +25,19 @@ public class GetJson extends AsyncTask<Context, Void, String> {
     private Context context = null;
     private GetJsonResponse delegate = null;
     private String latitude = null;
+    private String pagetoken = null;
 
 
-    public GetJson(Editable latitude) {
-        this.latitude = latitude.toString();
-
+    public GetJson(String local, String pagetoken) {
+        this.latitude = local;
+        this.pagetoken = pagetoken;
     }
 
     public void setDelegate(GetJsonResponse delegate){
         this.delegate = delegate;
     }
+
+
 
     @Override
     protected String doInBackground(Context... params) {
@@ -49,7 +52,7 @@ public class GetJson extends AsyncTask<Context, Void, String> {
 
     @Override
     protected void onPostExecute(String response) {
-        Toast.makeText(context, response, Toast.LENGTH_LONG).show();
+        //Toast.makeText(context, response, Toast.LENGTH_LONG).show();
         delegate.getJsonResponse(response);
     }
 
@@ -58,10 +61,13 @@ public class GetJson extends AsyncTask<Context, Void, String> {
         String url = "https://maps.googleapis.com/maps/api/place/search/json";
         Map<String, String> params = new HashMap<String, String>();
 
-        //params.put("location", "37.787930,-122.4074990");
+
         params.put("location", latitude);
-        params.put("radius", "300");
+        params.put("radius", "10000");
+        params.put("type", "grocery_or_supermarket");
+        params.put("sensor", "true");
         params.put("key", "AIzaSyA3mNfzyHZ4K4pviZStxXCCQBemWoXgkBg");
+        if (pagetoken != null) params.put("pagetoken", pagetoken);
 
         HttpResponse response = WebserviceHelper.doGET(url, params);
 

@@ -4,5 +4,6 @@
     <string name="app_name">PriceTag</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_list_places">ListPlaces</string>
 
 </resources>

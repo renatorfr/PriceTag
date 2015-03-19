@@ -4,14 +4,14 @@ package com.preco.milionarios.pricetag.PlacesObjects;
  * Created by dunha on 16/03/2015.
  */
 public class Geometry {
-    private Location location;
+    private LocationResult location;
 
 
-    public Location getLocation() {
+    public LocationResult getLocationResult() {
         return location;
     }
 
-    public void setLocation(Location geometry) {
+    public void setLocationResult(LocationResult geometry) {
         this.location = geometry;
     }
 }
