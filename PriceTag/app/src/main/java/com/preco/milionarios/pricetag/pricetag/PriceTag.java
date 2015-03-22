@@ -3,18 +3,23 @@ package com.preco.milionarios.pricetag.pricetag;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.preco.milionarios.pricetag.PlacesObjects.ItensListView;
+import com.preco.milionarios.pricetag.PlacesObjects.ListaAdapter;
 import com.preco.milionarios.pricetag.PlacesObjects.Place;
 import com.preco.milionarios.pricetag.PlacesObjects.PlaceResult;
 import com.preco.milionarios.pricetag.R;
@@ -24,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class PriceTag extends Activity implements GetJson.GetJsonResponse, Localization.GetGPSResponse{
+public class PriceTag extends Activity implements GetJson.GetJsonResponse, Localization.GetGPSResponse {
 
     private Button getLeitura;
     private TextView description;
@@ -35,8 +40,9 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse, Local
     private EditText longitude;
     private Context context = this;
     private Place places;
+
     private List<PlaceResult> placesResult = new ArrayList<PlaceResult>();
-    private Location localNow;
+    public static Location localNow;
     private PriceTag thisClass = this;
 
 
@@ -58,6 +64,8 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse, Local
         longitude = (EditText) findViewById(R.id.edLongitude);
 
 
+
+
         // listener para ler codigo de barras
         getLeitura.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,7 +82,8 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse, Local
                 Intent intent = new Intent(getBaseContext(), ItensListView.class);
                 ItensListView.places = placesResult;
                 startActivity(intent);
-                finish();
+
+
             }
         });
 
@@ -149,4 +158,6 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse, Local
         getPlace();
 
     }
+
+
 }

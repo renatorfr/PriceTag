@@ -63,7 +63,8 @@ public class GetJson extends AsyncTask<Context, Void, String> {
 
 
         params.put("location", latitude);
-        params.put("radius", "10000");
+        //params.put("radius", "10000");
+        params.put("rankby", "distance");
         params.put("type", "grocery_or_supermarket");
         params.put("sensor", "true");
         params.put("key", "AIzaSyA3mNfzyHZ4K4pviZStxXCCQBemWoXgkBg");

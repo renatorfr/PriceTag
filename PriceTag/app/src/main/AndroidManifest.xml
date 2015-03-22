@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".pricetag.ItensListView"
+            android:name=".PlacesObjects.ItensListView"
             android:label="@string/title_activity_list_places" >
         </activity>
     </application>
