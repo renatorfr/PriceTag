@@ -1,7 +1,5 @@
 package com.preco.milionarios.pricetag.utils;
 
-import android.util.Log;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -25,9 +23,12 @@ import java.util.Map.Entry;
 /**
  * Created by dunha on 25/02/2015.
  */
+@SuppressWarnings("deprecation")
 public class WebserviceHelper {
 
-    private static final String LOG_TAG = "peloton_webservice_helper";
+    private static HttpClient httpClient;
+    private static HttpClient httpClient2;
+
 
     public static HttpResponse doPOST(String webserviceUrl, Map<String, Object> paramsPost) {
         HttpPost httpPost = new HttpPost(webserviceUrl);
@@ -43,42 +44,48 @@ public class WebserviceHelper {
             entity = new StringEntity(data.toString());
             httpPost.setEntity(entity);
 
-            HttpClient httpClient = new DefaultHttpClient();
+            httpClient = new DefaultHttpClient();
             return httpClient.execute(httpPost);
         } catch (JSONException e) {
-            Log.e(LOG_TAG, e.getMessage());
+            //Log.e(LOG_TAG, e.getMessage());
         } catch (ClientProtocolException e) {
-            Log.e(LOG_TAG, e.getMessage());
+            //Log.e(LOG_TAG, e.getMessage());
         } catch (UnsupportedEncodingException e) {
-            Log.e(LOG_TAG, e.getMessage());
+            //Log.e(LOG_TAG, e.getMessage());
         } catch (IOException e) {
-            Log.e(LOG_TAG, e.getMessage());
+            //Log.e(LOG_TAG, e.getMessage());
         }
 
         return null;
     }
 
     public static HttpResponse doGET(String webserviceUrl, Map<String, String> params) {
-        HttpClient httpClient = new DefaultHttpClient();
-        HttpGet httpGet = new HttpGet(getGETRequestUrl(webserviceUrl, params));
+        httpClient2 = new DefaultHttpClient();
+        HttpGet httpGet;
+        if (params != null) httpGet = new HttpGet(getGETRequestUrl(webserviceUrl, params));
+        else httpGet = new HttpGet(webserviceUrl);
+
         try {
-            return httpClient.execute(httpGet);
+            return httpClient2.execute(httpGet);
         } catch (IOException e) {
-            Log.e(LOG_TAG, e.getMessage());
+            e.printStackTrace();
         }
 
         return null;
     }
 
-    public static String getGETRequestUrl(String webserviceUrl, Map<String, String> params) {
-        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 
+    public static String getGETRequestUrl(String webserviceUrl, Map<String, String> params) {
+
+        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
         for (Entry<String, String> entry : params.entrySet()) {
             nameValuePairs.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
         }
-
         String paramsString = URLEncodedUtils.format(nameValuePairs, "UTF-8");
-
         return webserviceUrl + "?" + paramsString;
     }
 }
+    
+    
+    
+

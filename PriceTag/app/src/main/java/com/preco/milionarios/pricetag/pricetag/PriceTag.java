@@ -3,30 +3,24 @@ package com.preco.milionarios.pricetag.pricetag;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParser;
+import com.preco.milionarios.pricetag.PlacesObjects.FacebookJson;
 import com.preco.milionarios.pricetag.PlacesObjects.ItensListView;
-import com.preco.milionarios.pricetag.PlacesObjects.ListaAdapter;
-import com.preco.milionarios.pricetag.PlacesObjects.Place;
-import com.preco.milionarios.pricetag.PlacesObjects.PlaceResult;
 import com.preco.milionarios.pricetag.R;
 import com.preco.milionarios.pricetag.utils.ParseHtml;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class PriceTag extends Activity implements GetJson.GetJsonResponse, Localization.GetGPSResponse {
@@ -39,12 +33,10 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse, Local
     private EditText latitude;
     private EditText longitude;
     private Context context = this;
-    private Place places;
+    private FacebookJson places;
 
-    private List<PlaceResult> placesResult = new ArrayList<PlaceResult>();
     public static Location localNow;
     private PriceTag thisClass = this;
-
 
 
     @Override
@@ -64,6 +56,8 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse, Local
         longitude = (EditText) findViewById(R.id.edLongitude);
 
 
+        showList.requestFocus();
+        showList.setEnabled(false);
 
 
         // listener para ler codigo de barras
@@ -80,16 +74,13 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse, Local
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getBaseContext(), ItensListView.class);
-                ItensListView.places = placesResult;
+
+                ItensListView.places = places.getData();
                 startActivity(intent);
 
 
             }
         });
-
-
-
-
         //listener para obter localização
         getPosition.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,24 +122,11 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse, Local
     }
 
     private void getPlace() {
-        GetJson getJson = new GetJson(latitude.getText() + "," + longitude.getText(), null);
+        GetJson getJson = new GetJson(latitude.getText() + "," + longitude.getText());
         getJson.setDelegate(this);
         getJson.execute(this);
     }
 
-    public List<PlaceResult> loadPlaces(String jsonString) {
-        Gson gson = new Gson();
-        places = gson.fromJson(jsonString, new Place().getClass());
-        //for(PlaceResult placeResult : places.getResult())
-        //    Toast.makeText(this, "" + placeResult.getName() + " - " + placeResult.getGeometry().getLocationResult().getDistance(localNow), Toast.LENGTH_LONG).show();
-        Toast.makeText(this, "OK" , Toast.LENGTH_LONG).show();
-        return places.getResult();
-    }
-
-    @Override
-    public void getJsonResponse(String placesJson) {
-        placesResult = this.loadPlaces(placesJson);
-    }
 
     @Override
     public void getGPSResponse(Location location) {
@@ -160,4 +138,12 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse, Local
     }
 
 
+    @Override
+    public void getJsonResponse(String placesJson) {
+        placesJson = new GsonBuilder().setPrettyPrinting().create().toJson(new JsonParser().parse(placesJson));
+        Gson gson = new Gson();
+        places = gson.fromJson(placesJson, FacebookJson.class);
+        showList.setEnabled(true);
+
+    }
 }
