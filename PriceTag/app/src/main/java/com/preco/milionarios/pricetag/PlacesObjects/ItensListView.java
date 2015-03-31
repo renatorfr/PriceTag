@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class ItensListView extends Activity implements OnItemClickListener {
 
-    public static List<FacebookPlaces> places;
+    public static List<MyPlaces> places;
     private ListaAdapter adapter;
 
 
@@ -42,7 +42,7 @@ public class ItensListView extends Activity implements OnItemClickListener {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //Pega o item que foi selecionado.
-        FacebookPlaces item = adapter.getItem(position);
+        MyPlaces item = adapter.getItem(position);
         //Demostração
         Toast.makeText(this, "Você Clicou em: " + item.getName(), Toast.LENGTH_LONG).show();
     }

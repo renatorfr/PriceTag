@@ -28,10 +28,10 @@ public class ListaAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
     Handler handler = new Handler();
-    private List<FacebookPlaces> places = null;
+    private List<MyPlaces> places = null;
 
 
-    public ListaAdapter(Context context, List<FacebookPlaces> places) {
+    public ListaAdapter(Context context, List<MyPlaces> places) {
         this.places = places;
         mInflater = LayoutInflater.from(context);
     }
@@ -41,7 +41,7 @@ public class ListaAdapter extends BaseAdapter {
         return places.size();
     }
 
-    public FacebookPlaces getItem(int position) {
+    public MyPlaces getItem(int position) {
 
         return places.get(position);
     }
@@ -54,23 +54,23 @@ public class ListaAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View view, ViewGroup parent) {
-        final FacebookPlaces place = places.get(position);
+        final MyPlaces place = places.get(position);
         view = mInflater.inflate(R.layout.itens_list, null);
 
 
         ImageView imageView = (ImageView) view.findViewById(R.id.image_view);
-        getImagem(imageView, place.getImage());
+        getImagem(imageView, place.getIcon());
 
         TextView textViewNome = (TextView) view.findViewById(R.id.text_view_nome);
         textViewNome.setText(place.getName());
 
 
         TextView textViewStreet = (TextView) view.findViewById(R.id.text_view_street);
-        textViewStreet.setText(place.getLocation().getStreet() + " - " + place.getLocation().getCity());
+        textViewStreet.setText(place.getEndereco());
 
         TextView textViewDist = (TextView) view.findViewById(R.id.text_view_dist);
         DecimalFormat df = new DecimalFormat("#,##0.00");
-        String textoIdade = df.format(place.getDistancia()) + "Km";
+        String textoIdade = df.format(place.getDistance()) + "Km";
         textViewDist.setText(textoIdade);
 
         return view;

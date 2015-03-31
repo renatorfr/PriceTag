@@ -5,21 +5,16 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.google.gson.Gson;
-import com.preco.milionarios.pricetag.PlacesObjects.FacebookJson;
+import com.preco.milionarios.pricetag.PlacesObjects.MyPlaces;
+import com.preco.milionarios.pricetag.PlacesObjects.MyPlacesJson;
 import com.preco.milionarios.pricetag.utils.WebserviceHelper;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 
 /**
@@ -29,15 +24,16 @@ public class GetJson extends AsyncTask<Context, Void, String> {
 
     private Context context = null;
     private GetJsonResponse delegate = null;
-    private String coordenadas = null;
-    private FacebookJson places;
+    private String lat;
+    private String lng;
+
+    private MyPlacesJson places;
     Gson gson = new Gson();
 
 
-    public GetJson(String local) {
-        this.coordenadas = local;
-
-
+    public GetJson(String lat, String lng) {
+        this.lat = lat;
+        this.lng = lng;
     }
 
     public void setDelegate(GetJsonResponse delegate) {
@@ -49,7 +45,7 @@ public class GetJson extends AsyncTask<Context, Void, String> {
     protected String doInBackground(Context... params) {
         try {
             context = params[0];
-            return getAllPlaces(coordenadas);
+            return getAllPlaces(lat, lng);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -62,11 +58,12 @@ public class GetJson extends AsyncTask<Context, Void, String> {
         delegate.getJsonResponse(response);
     }
 
-    private String getAllPlaces(String coordenadas) throws IOException {
+    private String getAllPlaces(String lat, String lng) throws IOException {
         HttpResponse response;
         String url = "https://pricetagwebservice.herokuapp.com/json";
         Map<String, String> params = new HashMap<String, String>();
-        params.put("location", coordenadas);
+        params.put("lat", lat);
+        params.put("lng", lng);
 
         response = WebserviceHelper.doGET(url, params);
 
@@ -76,18 +73,6 @@ public class GetJson extends AsyncTask<Context, Void, String> {
         }
         return null;
 
-    }
-
-
-    private String getUrl(String webserviceUrl, Map<String, String> params) {
-        if (params == null) return webserviceUrl;
-
-        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-        for (Entry<String, String> entry : params.entrySet()) {
-            nameValuePairs.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
-        }
-        String paramsString = URLEncodedUtils.format(nameValuePairs, "UTF-8");
-        return webserviceUrl + "?" + paramsString;
     }
 
     interface GetJsonResponse {

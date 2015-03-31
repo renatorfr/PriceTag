@@ -12,15 +12,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
-import com.preco.milionarios.pricetag.PlacesObjects.FacebookJson;
 import com.preco.milionarios.pricetag.PlacesObjects.ItensListView;
+import com.preco.milionarios.pricetag.PlacesObjects.MyPlacesJson;
 import com.preco.milionarios.pricetag.R;
 import com.preco.milionarios.pricetag.utils.ParseHtml;
+
+import java.util.List;
 
 
 public class PriceTag extends Activity implements GetJson.GetJsonResponse, Localization.GetGPSResponse {
@@ -33,7 +34,7 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse, Local
     private EditText latitude;
     private EditText longitude;
     private Context context = this;
-    private FacebookJson places;
+    private MyPlacesJson places;
 
     public static Location localNow;
     private PriceTag thisClass = this;
@@ -75,7 +76,7 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse, Local
             public void onClick(View v) {
                 Intent intent = new Intent(getBaseContext(), ItensListView.class);
 
-                ItensListView.places = places.getData();
+                ItensListView.places = places.getMyplaces();
                 startActivity(intent);
 
 
@@ -122,7 +123,7 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse, Local
     }
 
     private void getPlace() {
-        GetJson getJson = new GetJson(latitude.getText() + "," + longitude.getText());
+        GetJson getJson = new GetJson(latitude.getText().toString(), longitude.getText().toString());
         getJson.setDelegate(this);
         getJson.execute(this);
     }
@@ -142,7 +143,7 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse, Local
     public void getJsonResponse(String placesJson) {
         placesJson = new GsonBuilder().setPrettyPrinting().create().toJson(new JsonParser().parse(placesJson));
         Gson gson = new Gson();
-        places = gson.fromJson(placesJson, FacebookJson.class);
+        places = gson.fromJson(placesJson, MyPlacesJson.class);
         showList.setEnabled(true);
 
     }
