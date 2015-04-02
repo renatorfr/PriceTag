@@ -33,13 +33,13 @@ public class WebserviceHelper {
     public static HttpResponse doPOST(String webserviceUrl, Map<String, Object> paramsPost) {
         HttpPost httpPost = new HttpPost(webserviceUrl);
 
-        httpPost.setHeader("content-type", "application/json");
+
         JSONObject data = new JSONObject();
+
         try {
             for (Entry<String, Object> entry : paramsPost.entrySet()) {
                 data.put(entry.getKey(), entry.getValue());
             }
-
             StringEntity entity = null;
             entity = new StringEntity(data.toString());
             httpPost.setEntity(entity);

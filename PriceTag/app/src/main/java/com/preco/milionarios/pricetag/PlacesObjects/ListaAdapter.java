@@ -64,15 +64,22 @@ public class ListaAdapter extends BaseAdapter {
         TextView textViewNome = (TextView) view.findViewById(R.id.text_view_nome);
         textViewNome.setText(place.getName());
 
-
         TextView textViewStreet = (TextView) view.findViewById(R.id.text_view_street);
         textViewStreet.setText(place.getEndereco());
 
         TextView textViewDist = (TextView) view.findViewById(R.id.text_view_dist);
-        DecimalFormat df = new DecimalFormat("#,##0.00");
-        String textoIdade = df.format(place.getDistance()) + "Km";
-        textViewDist.setText(textoIdade);
+        DecimalFormat df;
+        String textoDistancia;
 
+        if (place.getDistance() < 1) {
+            df = new DecimalFormat("#,##0");
+            textoDistancia = df.format(place.getDistance() * 1000) + "m";
+        }
+        else {
+            df = new DecimalFormat("#,##0.00");
+            textoDistancia = df.format(place.getDistance()) + "Km";
+        }
+        textViewDist.setText(textoDistancia);
         return view;
     }
 
