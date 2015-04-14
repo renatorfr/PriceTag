@@ -24,3 +24,5 @@ proguard/
 
 # Log Files
 *.log
+PriceTag/.idea/**
+PriceTag/.idea/misc.xml
