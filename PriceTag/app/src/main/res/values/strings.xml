@@ -5,6 +5,10 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_list_places">ListPlaces</string>
-    <string name="title_activity_login">Login</string>
+    <string name="title_activity_login">Price Tag</string>
+
+    <string name="activity_price_tag_descricao_label">Resultado</string>
+    <string name="activity_price_tag_latitude_label">Latitude</string>
+    <string name="activity_price_tag_longitude_label">Longitude</string>
 
 </resources>

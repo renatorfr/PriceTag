@@ -41,6 +41,26 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse, Local
 
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        // Save hierarchy state
+        super.onSaveInstanceState(outState);
+
+        outState.putString(getString(R.string.activity_price_tag_descricao_label), description.getText().toString());
+        outState.putString(getString(R.string.activity_price_tag_latitude_label), latitude.getText().toString());
+        outState.putString(getString(R.string.activity_price_tag_longitude_label), longitude.getText().toString());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        // Save hierarchy state
+        super.onRestoreInstanceState(savedInstanceState);
+
+        description.setText(savedInstanceState.getString(getString(R.string.activity_price_tag_descricao_label)));
+        latitude.setText(savedInstanceState.getString(getString(R.string.activity_price_tag_latitude_label)));
+        longitude.setText(savedInstanceState.getString(getString(R.string.activity_price_tag_longitude_label)));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_price_tag);
@@ -51,7 +71,7 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse, Local
 
         getLeitura = (Button) findViewById(R.id.getLeitura);
         showList = (Button) findViewById(R.id.showList);
-        description = (TextView) findViewById(R.id.resultado);
+        description = (TextView) findViewById(R.id.txtDescricao);
         getPosition = (Button) findViewById(R.id.btLocalizar);
         latitude = (EditText) findViewById(R.id.edLatitude);
         longitude = (EditText) findViewById(R.id.edLongitude);

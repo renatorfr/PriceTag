@@ -32,8 +32,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.73"
-                    android:text="resultado"
-                    android:id="@+id/resultado" />
+                    android:text="@string/activity_price_tag_descricao_label"
+                    android:id="@+id/txtDescricao" />
             </LinearLayout>
 
             <LinearLayout
@@ -45,7 +45,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.22"
-                    android:text="Latitude" />
+                    android:text="@string/activity_price_tag_latitude_label" />
 
                 <EditText
                     android:id="@+id/edLatitude"
@@ -67,7 +67,7 @@
                     android:id="@+id/textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Longitude" />
+                    android:text="@string/activity_price_tag_longitude_label" />
 
                 <EditText
                     android:id="@+id/edLongitude"
@@ -92,12 +92,6 @@
                 android:layout_height="wrap_content"
                 android:text="Exibir Lista"
                 android:id="@+id/showList"
-                android:layout_gravity="center_horizontal" />
-
-            <ListView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/listView"
                 android:layout_gravity="center_horizontal" />
 
         </LinearLayout>

@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
+import com.preco.milionarios.pricetag.pricetag.PriceTag;
 
 
 public class Login extends Activity implements View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -79,7 +80,8 @@ public class Login extends Activity implements View.OnClickListener, GoogleApiCl
     @Override
     public void onConnected(Bundle bundle) {
         mSignInClicked = false;
-        Toast.makeText(this, "User is connected", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this, PriceTag.class);
+        startActivity(intent);
     }
 
     @Override
