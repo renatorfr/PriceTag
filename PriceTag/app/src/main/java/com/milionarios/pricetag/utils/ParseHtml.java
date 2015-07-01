@@ -1,4 +1,4 @@
-package com.preco.milionarios.pricetag.utils;
+package com.milionarios.pricetag.utils;
 
 
 import org.jsoup.Jsoup;

@@ -1,4 +1,4 @@
-package com.preco.milionarios.pricetag.PlacesObjects;
+package com.milionarios.pricetag.domain;
 
 
 

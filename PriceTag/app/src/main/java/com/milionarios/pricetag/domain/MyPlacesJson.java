@@ -1,6 +1,5 @@
-package com.preco.milionarios.pricetag.PlacesObjects;
+package com.milionarios.pricetag.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MyPlacesJson {

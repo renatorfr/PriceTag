@@ -1,4 +1,4 @@
-package com.preco.milionarios.pricetag.PlacesObjects;
+package com.milionarios.pricetag.activity;
 
 
 import android.app.Activity;
@@ -10,7 +10,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.preco.milionarios.pricetag.R;
+import com.milionarios.pricetag.R;
+import com.milionarios.pricetag.adapter.ListaAdapter;
+import com.milionarios.pricetag.domain.MyPlaces;
 
 import java.util.List;
 

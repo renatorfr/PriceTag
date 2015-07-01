@@ -1,4 +1,4 @@
-package com.preco.milionarios.pricetag.pricetag;
+package com.milionarios.pricetag.utils;
 
 //importação das classes necessárias para o funcionamento do aplicativo
 
@@ -56,7 +56,7 @@ public class Localization {
 
     }
 
-    interface GetGPSResponse {
+    public interface GetGPSResponse {
         void getGPSResponse(Location location);
     }
 

@@ -1,4 +1,4 @@
-package com.preco.milionarios.pricetag.PlacesObjects;
+package com.milionarios.pricetag.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -11,7 +11,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.preco.milionarios.pricetag.R;
+import com.milionarios.pricetag.R;
+import com.milionarios.pricetag.domain.MyPlaces;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,6 +20,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.List;
+
+
 
 /**
  * Created by dunha on 19/03/2015.

@@ -1,4 +1,4 @@
-package com.preco.milionarios.pricetag.pricetag;
+package com.milionarios.pricetag.activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -16,12 +16,11 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
-import com.preco.milionarios.pricetag.PlacesObjects.ItensListView;
-import com.preco.milionarios.pricetag.PlacesObjects.MyPlacesJson;
-import com.preco.milionarios.pricetag.R;
-import com.preco.milionarios.pricetag.utils.ParseHtml;
-
-import java.util.List;
+import com.milionarios.pricetag.R;
+import com.milionarios.pricetag.domain.MyPlacesJson;
+import com.milionarios.pricetag.utils.GetJson;
+import com.milionarios.pricetag.utils.Localization;
+import com.milionarios.pricetag.utils.ParseHtml;
 
 
 public class PriceTag extends Activity implements GetJson.GetJsonResponse, Localization.GetGPSResponse {

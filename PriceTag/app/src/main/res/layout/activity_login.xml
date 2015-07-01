@@ -4,7 +4,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.preco.milionarios.pricetag.Login">
+    tools:context="com.preco.milionarios.pricetag.activity.Login">
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"

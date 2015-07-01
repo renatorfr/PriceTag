@@ -1,13 +1,11 @@
-package com.preco.milionarios.pricetag.pricetag;
+package com.milionarios.pricetag.utils;
 
 
 import android.content.Context;
 import android.os.AsyncTask;
 
 import com.google.gson.Gson;
-import com.preco.milionarios.pricetag.PlacesObjects.MyPlaces;
-import com.preco.milionarios.pricetag.PlacesObjects.MyPlacesJson;
-import com.preco.milionarios.pricetag.utils.WebserviceHelper;
+import com.milionarios.pricetag.domain.MyPlacesJson;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.impl.client.BasicResponseHandler;
@@ -75,7 +73,7 @@ public class GetJson extends AsyncTask<Context, Void, String> {
 
     }
 
-    interface GetJsonResponse {
+    public interface GetJsonResponse {
         void getJsonResponse(String placesJson);
     }
 }
