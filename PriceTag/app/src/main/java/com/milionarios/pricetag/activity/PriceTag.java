@@ -12,23 +12,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import com.milionarios.pricetag.R;
 import com.milionarios.pricetag.domain.MyPlacesJson;
 import com.milionarios.pricetag.utils.GetJson;
+import com.milionarios.pricetag.utils.Localization;
 import com.milionarios.pricetag.utils.ParseHtml;
+import com.milionarios.pricetag.utils.interfaces.LocationObserver;
 
 
-public class PriceTag extends Activity implements GetJson.GetJsonResponse, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class PriceTag extends Activity implements GetJson.GetJsonResponse, LocationObserver {
 
     public static Location localNow;
     private Button getLeitura;
@@ -41,11 +37,7 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse, Googl
     private Context context = this;
     private MyPlacesJson places;
     private PriceTag thisClass = this;
-    private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
-    private Boolean mRequestingLocationUpdates;
-    private LocationRequest mLocationRequest;
-
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -110,26 +102,7 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse, Googl
             }
         });
 
-        buildGoogleApiClient();
-        createLocationRequest();
-        mGoogleApiClient.connect();
-        mRequestingLocationUpdates = false;
-
-    }
-
-    protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-    }
-
-    protected void createLocationRequest() {
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10000);
-        mLocationRequest.setFastestInterval(5000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        startLocationUpdates();
     }
 
     @Override
@@ -175,43 +148,23 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse, Googl
 
     }
 
-    @Override
-    public void onConnected(Bundle bundle) {
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        updateLocationUI();
-
-        if (!mRequestingLocationUpdates) {
-            mRequestingLocationUpdates = true;
-            startLocationUpdates();
-        }
-    }
-
     private void startLocationUpdates() {
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        Toast.makeText(this, "GPS Suspenso", Toast.LENGTH_LONG);
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Toast.makeText(this, "GPS Falhou", Toast.LENGTH_LONG);
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        mLastLocation = location;
-        updateLocationUI();
+        Localization localization = Localization.getInstance();
+        localization.start(this);
+        localization.registerObserver(this);
     }
 
     private void updateLocationUI() {
-        Toast.makeText(this, "GPS Atualizou", Toast.LENGTH_LONG);
         if (mLastLocation != null) {
             showList.setEnabled(true);
             latitude.setText(String.valueOf(mLastLocation.getLatitude()));
             longitude.setText(String.valueOf(mLastLocation.getLongitude()));
         }
+    }
+
+    @Override
+    public void locationUpdate(Location location) {
+        mLastLocation = location;
+        updateLocationUI();
     }
 }
