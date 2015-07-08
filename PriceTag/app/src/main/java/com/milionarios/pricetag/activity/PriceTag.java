@@ -12,7 +12,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
@@ -162,9 +164,25 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse, Locat
         }
     }
 
+
     @Override
     public void locationUpdate(Location location) {
         mLastLocation = location;
         updateLocationUI();
+
+
+    }
+
+
+    @Override
+    public void connectionFailed(ConnectionResult connectionResult) {
+        Toast.makeText(this, "GPS incapaz de determinar sua posição: Code Error: " + connectionResult.getErrorCode(), Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void connectionSuspended(int i) {
+        Toast.makeText(context, "GPS incapaz de determinar sua posição: Code Error: " + i, Toast.LENGTH_LONG).show();
+
     }
 }

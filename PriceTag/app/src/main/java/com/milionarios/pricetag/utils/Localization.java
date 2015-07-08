@@ -94,31 +94,30 @@ public class Localization implements GoogleApiClient.ConnectionCallbacks, Google
 
     @Override
     public void onConnectionSuspended(int i) {
-        Toast.makeText(context, "GPS incapaz de determinar sua posição " + i, Toast.LENGTH_LONG);
+        for (LocationObserver observer : observers) {
+            observer.connectionSuspended(i);
+        }
         mGoogleApiClient.connect();
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-          /*
-             * Google Play services can resolve some errors it detects. If the error
-            * has a resolution, try sending an Intent to start a Google Play
-            * services activity that can resolve error.
-            */
+
+        for (LocationObserver observer : observers) {
+            observer.connectionFailed(connectionResult);
+        }
+
+
         if (connectionResult.hasResolution()) {
             try {
-                // Start an Activity that tries to resolve the error
                 connectionResult.startResolutionForResult((Activity) context, CONNECTION_FAILURE_RESOLUTION_REQUEST);
-            /*
-             * Thrown if Google Play services canceled the original
-             * PendingIntent
-             */
+
             } catch (IntentSender.SendIntentException e) {
-                // Log the error
                 e.printStackTrace();
             }
         } else {
-            Toast.makeText(context, "GPS incapaz de determinar sua posição", Toast.LENGTH_LONG);
+
+
 
         }
     }
