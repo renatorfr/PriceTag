@@ -27,8 +27,7 @@ import com.milionarios.pricetag.utils.interfaces.LocationObserver;
 
 
 public class PriceTag extends Activity implements GetJson.GetJsonResponse, LocationObserver {
-
-    public static Location localNow;
+    
     private Button getLeitura;
     private TextView description;
     private String contents;
@@ -40,6 +39,19 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse, Locat
     private MyPlacesJson places;
     private PriceTag thisClass = this;
     private Location mLastLocation;
+    private Localization localization = Localization.getInstance(this);
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopLocationUpdates();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startLocationUpdates();
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -151,9 +163,11 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse, Locat
     }
 
     private void startLocationUpdates() {
-        Localization localization = Localization.getInstance();
-        localization.start(this);
         localization.registerObserver(this);
+    }
+
+    private void stopLocationUpdates() {
+        localization.unregisterObserver(this);
     }
 
     private void updateLocationUI() {
@@ -164,25 +178,19 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse, Locat
         }
     }
 
-
     @Override
     public void locationUpdate(Location location) {
         mLastLocation = location;
         updateLocationUI();
-
-
     }
-
 
     @Override
     public void connectionFailed(ConnectionResult connectionResult) {
         Toast.makeText(this, "GPS incapaz de determinar sua posição: Code Error: " + connectionResult.getErrorCode(), Toast.LENGTH_LONG).show();
-
     }
 
     @Override
     public void connectionSuspended(int i) {
         Toast.makeText(context, "GPS incapaz de determinar sua posição: Code Error: " + i, Toast.LENGTH_LONG).show();
-
     }
 }

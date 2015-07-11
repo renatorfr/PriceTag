@@ -10,5 +10,6 @@
     <string name="activity_price_tag_descricao_label">Resultado</string>
     <string name="activity_price_tag_latitude_label">Latitude</string>
     <string name="activity_price_tag_longitude_label">Longitude</string>
+    <string name="activity_price_tag_localization">activity_price_tag_localization</string>
 
 </resources>
