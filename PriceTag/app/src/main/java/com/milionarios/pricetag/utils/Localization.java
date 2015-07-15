@@ -54,6 +54,12 @@ public class Localization implements GoogleApiClient.ConnectionCallbacks, Google
         }
     }
 
+    private void notifyObservers(IntentSender.SendIntentException exception) {
+        for (LocationObserver observer : observers) {
+            observer.connectionFailed(exception);
+        }
+    }
+
     public void registerObserver(LocationObserver observer) {
         if (observer != null) {
             observers.add(observer);
@@ -126,17 +132,17 @@ public class Localization implements GoogleApiClient.ConnectionCallbacks, Google
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
+        try {
+            notifyObservers(connectionResult);
 
-        notifyObservers(connectionResult);
+            if (connectionResult.hasResolution()) {
 
-        if (connectionResult.hasResolution()) {
-            try {
                 connectionResult.startResolutionForResult((Activity) context, CONNECTION_FAILURE_RESOLUTION_REQUEST);
-
-            } catch (IntentSender.SendIntentException e) {
-                e.printStackTrace();
             }
+        } catch (IntentSender.SendIntentException e) {
+            notifyObservers(e);
         }
+
     }
 
     @Override
