@@ -186,11 +186,6 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse, Locat
     }
 
     @Override
-    public void connectionFailed(ConnectionResult connectionResult) {
-        Toast.makeText(this, "GPS incapaz de determinar sua posição: Code Error: " + connectionResult.getErrorCode(), Toast.LENGTH_LONG).show();
-    }
-
-    @Override
     public void connectionFailed(IntentSender.SendIntentException exception) {
         Toast.makeText(this, "GPS erro de conexão: Code Error: " + exception.getMessage(), Toast.LENGTH_LONG).show();
     }

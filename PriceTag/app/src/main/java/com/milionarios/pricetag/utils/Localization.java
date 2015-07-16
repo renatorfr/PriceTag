@@ -48,11 +48,6 @@ public class Localization implements GoogleApiClient.ConnectionCallbacks, Google
         }
     }
 
-    private void notifyObservers(ConnectionResult connectionResult) {
-        for (LocationObserver observer : observers) {
-            observer.connectionFailed(connectionResult);
-        }
-    }
 
     private void notifyObservers(IntentSender.SendIntentException exception) {
         for (LocationObserver observer : observers) {
@@ -132,15 +127,14 @@ public class Localization implements GoogleApiClient.ConnectionCallbacks, Google
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        try {
-            notifyObservers(connectionResult);
-
-            if (connectionResult.hasResolution()) {
-
+        if (connectionResult.hasResolution()) {
+            try {
                 connectionResult.startResolutionForResult((Activity) context, CONNECTION_FAILURE_RESOLUTION_REQUEST);
+            } catch(IntentSender.SendIntentException e){
+                notifyObservers(e);
             }
-        } catch (IntentSender.SendIntentException e) {
-            notifyObservers(e);
+        } else {
+            notifyObservers(new IntentSender.SendIntentException("GPS failed connection and this problem don't have solution"));
         }
 
     }

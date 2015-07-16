@@ -12,7 +12,6 @@ import java.util.Map;
  */
 public interface LocationObserver {
     public void locationUpdate(Location location);
-    public void connectionFailed(ConnectionResult connectionResult);
     public void connectionFailed(IntentSender.SendIntentException exception);
     public void connectionSuspended(int i);
 }
