@@ -80,7 +80,6 @@ public class Localization implements GoogleApiClient.ConnectionCallbacks, Google
 
     private void start(Context context) {
         this.context = context;
-
         buildGoogleApiClient();
         createLocationRequest();
         mGoogleApiClient.connect();
@@ -96,7 +95,9 @@ public class Localization implements GoogleApiClient.ConnectionCallbacks, Google
     }
 
     private void startLocationUpdates() {
+
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+
     }
 
     protected void createLocationRequest() {
@@ -113,7 +114,7 @@ public class Localization implements GoogleApiClient.ConnectionCallbacks, Google
 
         if (!mRequestingLocationUpdates) {
             mRequestingLocationUpdates = true;
-            startLocationUpdates();
+            if(mGoogleApiClient.isConnected()) startLocationUpdates();
         }
     }
 

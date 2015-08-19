@@ -40,11 +40,18 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse, Locat
     private MyPlacesJson places;
     private PriceTag thisClass = this;
     private Location mLastLocation;
-    private Localization localization = Localization.getInstance(this);
+    private Localization localization;
 
     @Override
     protected void onPause() {
         super.onPause();
+
+        stopLocationUpdates();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
         stopLocationUpdates();
     }
 
@@ -53,6 +60,8 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse, Locat
         super.onResume();
         startLocationUpdates();
     }
+
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -90,9 +99,10 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse, Locat
         latitude = (EditText) findViewById(R.id.edLatitude);
         longitude = (EditText) findViewById(R.id.edLongitude);
 
-
+        getPosition.setEnabled(false);
         showList.requestFocus();
         showList.setEnabled(false);
+
 
 
         // listener para ler codigo de barras
@@ -105,6 +115,8 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse, Locat
             }
         });
 
+
+
         showList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,6 +125,15 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse, Locat
                 ItensListView.places = places.getMyplaces();
                 startActivity(intent);
 
+
+            }
+        });
+
+        getPosition.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showList.setEnabled(false);
+                getPlace();
 
             }
         });
@@ -164,6 +185,7 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse, Locat
     }
 
     private void startLocationUpdates() {
+        localization = Localization.getInstance(this);
         localization.registerObserver(this);
     }
 
@@ -173,9 +195,10 @@ public class PriceTag extends Activity implements GetJson.GetJsonResponse, Locat
 
     private void updateLocationUI() {
         if (mLastLocation != null) {
-            showList.setEnabled(true);
+
             latitude.setText(String.valueOf(mLastLocation.getLatitude()));
             longitude.setText(String.valueOf(mLastLocation.getLongitude()));
+            getPosition.setEnabled(true);
         }
     }
 
